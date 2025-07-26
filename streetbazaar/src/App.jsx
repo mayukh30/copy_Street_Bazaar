@@ -1,31 +1,26 @@
 import { useState } from 'react'
+import { ShoppingCart, Plus } from 'lucide-react';
 import './App.css'
+import Cart from './components/cart/Cart'
+import ProductManagementApp from './components/products/ProductManagementApp';
 
 function App() {
-  const [isLogin, setIsLogin] = useState(true);
-    const { user } = useContext(AuthContext);
-    
-    if (!user) {
-      return (
-        <AuthForm 
-          isLogin={isLogin} 
-          onToggle={() => setIsLogin(!isLogin)} 
-        />
-      );
-    }
-    
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Header />
-        <main>
-          {user.type === 'consumer' ? (
-            <ConsumerDashboard />
-          ) : (
-            <SupplierDashboard />
-          )}
-        </main>
-      </div>
-    );
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  
+  return (
+    // <div>
+    //   <button onClick={() => setIsCartOpen(true)} className="p-2 rounded-full shadow-xl shadow-black/30">
+    //     <ShoppingCart className="h-6 w-6" />
+    //   </button>
+    //   <Cart 
+    //     isOpen={isCartOpen} 
+    //     onClose={() => setIsCartOpen(false)} 
+    //   />
+    // </div>
+    <div className="App">
+      <ProductManagementApp />
+    </div>
+  );
 }
 
 export default App
