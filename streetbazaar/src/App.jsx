@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AppContext } from './components/common/AppContext';
 import Header from './components/common/Header';
 import HeaderSupplier from './components/common/HeaderSupplier';
 import Footer from './components/common/Footer';
+import Login from './components/auth/Login';
 import ConsumerDashboard from './components/dashboard/ConsumerDashboard';
 import SupplierDashboard from './components/dashboard/SupplierDashboard';
 import Products from './components/products/Product';
@@ -14,17 +16,9 @@ import ProductManagementApp from './components/products/ProductManagementApp';
 const App = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [cartItems, setCartItems] = useState([]);
-  
-  // Change user type to 'supplier' to test SupplierDashboard
-  const [user] = useState({
-    id: 'supplier123',
-    name: 'Bheem',
-    email: 'bheemChutki@email.com',
-    type: 'consumer', // Change this to 'supplier' or 'consumer' to switch dashboards
-    companyName: 'Bheem Supply Co.' // Additional field for suppliers
-  });
+  const [user, setUser] = useState(null); // User starts as null (not logged in)
 
-  // Mock data for suppliers - you can move this to AppContext later
+  // Mock data for suppliers
   const [products] = useState([
     { id: 1, name: 'Sample Product 1', price: 99.99, stock: 15, category: 'Electronics', supplierId: 'supplier123' },
     { id: 2, name: 'Sample Product 2', price: 149.99, stock: 8, category: 'Fashion', supplierId: 'supplier123' },
@@ -67,9 +61,10 @@ const App = () => {
   };
 
   const logout = () => {
-    // Handle logout logic
-    console.log('Logging out...');
-    // In a real app, you would clear user session, redirect to login, etc.
+    setUser(null);
+    setCurrentPage('dashboard');
+    setCartItems([]);
+    console.log('User logged out');
   };
 
   // Filter data for current supplier (for header notifications)
@@ -86,34 +81,17 @@ const App = () => {
     updateCartItem,
     removeFromCart,
     user,
+    setUser,
     logout,
     products,
     orders,
-    supplierProducts, // Add filtered supplier products
-    supplierOrders    // Add filtered supplier orders
+    supplierProducts,
+    supplierOrders
   };
 
-  const renderPage = () => {
-    // If user is a supplier, show supplier-specific pages
-    if (user.type === 'supplier') {
-      switch (currentPage) {
-        case 'dashboard':
-          return <SupplierDashboard />;
-        case 'products':
-          return <ProductManagementApp />; // Supplier product management
-        case 'orders':
-          return <Orders />; // Supplier order management
-        case 'analytics':
-          return <SupplierDashboard />; // Analytics is handled within SupplierDashboard
-        case 'profile':
-          return <Profile userType="supplier" />;
-        default:
-          return <SupplierDashboard />;
-      }
-    }
-    
-    // If user is a consumer, show consumer-specific pages
-    if (user.type === 'consumer') {
+  // Consumer Dashboard Component with routing
+  const ConsumerApp = () => {
+    const renderPage = () => {
       switch (currentPage) {
         case 'dashboard':
           return <ConsumerDashboard />;
@@ -124,26 +102,121 @@ const App = () => {
         case 'orders':
           return <Orders />;
         case 'profile':
-          return <Profile />;
+          return <Profile userType="consumer" />;
         default:
           return <ConsumerDashboard />;
       }
+    };
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <main>{renderPage()}</main>
+        <Footer />
+      </div>
+    );
+  };
+
+  // Supplier Dashboard Component with routing
+  const SupplierApp = () => {
+    const renderPage = () => {
+      switch (currentPage) {
+        case 'dashboard':
+          return <SupplierDashboard />;
+        case 'products':
+          return <ProductManagementApp />;
+        case 'orders':
+          return <Orders />;
+        case 'analytics':
+          return <SupplierDashboard />; // Analytics is handled within SupplierDashboard
+        case 'profile':
+          return <Profile userType="supplier" />;
+        default:
+          return <SupplierDashboard />;
+      }
+    };
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <HeaderSupplier />
+        <main>{renderPage()}</main>
+        <Footer />
+      </div>
+    );
+  };
+
+  // Protected Route Component
+  const ProtectedRoute = ({ children, requiredUserType }) => {
+    if (!user) {
+      return <Navigate to="/login" replace />;
     }
     
-    // Default fallback
-    return <ConsumerDashboard />;
+    if (requiredUserType && user.type !== requiredUserType) {
+      // Redirect to appropriate dashboard if wrong user type
+      const redirectPath = user.type === 'supplier' ? '/supplier' : '/consumer';
+      return <Navigate to={redirectPath} replace />;
+    }
+    
+    return children;
   };
 
   return (
     <AppContext.Provider value={contextValue}>
-      <div className="min-h-screen bg-gray-50">
-        {user.type === 'supplier' ? (<HeaderSupplier />): (<Header />)}
-        
-        <main>
-          {renderPage()}
-        </main>
-        <Footer />
-      </div>
+      <Router>
+        <Routes>
+          {/* Login Route */}
+          <Route 
+            path="/login" 
+            element={
+              user ? (
+                <Navigate to={user.type === 'supplier' ? '/supplier' : '/consumer'} replace />
+              ) : (
+                <Login />
+              )
+            } 
+          />
+          
+          {/* Consumer Routes */}
+          <Route 
+            path="/consumer" 
+            element={
+              <ProtectedRoute requiredUserType="consumer">
+                <ConsumerApp />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Supplier Routes */}
+          <Route 
+            path="/supplier" 
+            element={
+              <ProtectedRoute requiredUserType="supplier">
+                <SupplierApp />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Default Route */}
+          <Route 
+            path="/" 
+            element={
+              user ? (
+                <Navigate to={user.type === 'supplier' ? '/supplier' : '/consumer'} replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            } 
+          />
+          
+          {/* Catch all other routes */}
+          <Route 
+            path="*" 
+            element={
+              <Navigate to={user ? (user.type === 'supplier' ? '/supplier' : '/consumer') : '/login'} replace />
+            } 
+          />
+        </Routes>
+      </Router>
     </AppContext.Provider>
   );
 };
