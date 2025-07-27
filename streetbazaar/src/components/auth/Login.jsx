@@ -141,6 +141,7 @@ const Login = () => {
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
+          <h1 className='text-blue-600 font-bold text-4xl mb-2'>FreshMart</h1>
           <div className="flex justify-center mb-4">
             <div className="bg-blue-600 p-3 rounded-full">
               {userType === 'supplier' ? (

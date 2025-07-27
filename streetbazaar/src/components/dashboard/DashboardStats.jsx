@@ -49,7 +49,7 @@ const DashboardStats = ({ stats }) => {
                 </p>
                 <p className="text-2xl font-bold text-gray-900 mt-2">
                   {typeof value === 'number' && key.includes('Spent') 
-                    ? `$${value.toLocaleString()}` 
+                    ? `₹${value.toLocaleString()}` 
                     : typeof value === 'number' && key.includes('Rating')
                     ? `${value}/5`
                     : value.toLocaleString()}
