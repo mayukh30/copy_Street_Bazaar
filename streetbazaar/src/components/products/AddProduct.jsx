@@ -18,7 +18,18 @@ const AddProduct = ({ onAddProduct, onClose, editProduct = null }) => {
     }
   }, [editProduct]);
 
-  const categories = ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Beauty'];
+  const categories = [
+  'Vegetables',
+  'Fruits',
+  'Spices & Herbs',
+  'Dairy Products',
+  'Meat & Eggs',
+  'Grains & Pulses',
+  'Snacks & Bakery',
+  'Beverages',
+  'Oils & Condiments',
+  'Household Essentials'
+];
 
   const handleSubmit = () => {
     if (!formData.name || !formData.price || !formData.category) {
@@ -84,7 +95,7 @@ const AddProduct = ({ onAddProduct, onClose, editProduct = null }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Price ($)
+              Price (₹)
             </label>
             <input
               type="number"
