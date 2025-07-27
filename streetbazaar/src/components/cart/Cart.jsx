@@ -41,11 +41,13 @@ const Cart = () => {
             {cartItems.map((item) => (
               <div key={item.id} className="p-6">
                 <div className="flex items-center space-x-4">
-                  <div className="text-3xl">{item.image}</div>
+                  <div className="w-50 h-50 mb-4 flex justify-center items-center">
+                    <img src={item.image} alt={item.name} className=" w-full object-cover h-full rounded" />
+                  </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-900">{item.name}</h3>
                     <p className="text-sm text-gray-600">{item.supplier}</p>
-                    <p className="text-lg font-medium text-gray-900 mt-1">${item.price}</p>
+                    <p className="text-lg font-medium text-gray-900 mt-1">₹{item.price}</p>
                   </div>
                   <div className="flex items-center space-x-3">
                     <button
@@ -63,7 +65,7 @@ const Cart = () => {
                     </button>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-semibold text-gray-900">₹{(item.price * item.quantity).toFixed(2)}</p>
                     <button
                       onClick={() => removeFromCart(item.id)}
                       className="text-red-600 hover:text-red-700 text-sm mt-1"
@@ -81,20 +83,20 @@ const Cart = () => {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal</span>
-                <span className="font-medium">${subtotal.toFixed(2)}</span>
+                <span className="font-medium">₹{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Tax</span>
-                <span className="font-medium">${tax.toFixed(2)}</span>
+                <span className="font-medium">₹{tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Shipping</span>
-                <span className="font-medium">{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                <span className="font-medium">{shipping === 0 ? 'Free' : `₹${shipping.toFixed(2)}`}</span>
               </div>
               <div className="border-t border-gray-200 pt-3">
                 <div className="flex justify-between">
                   <span className="text-lg font-semibold text-gray-900">Total</span>
-                  <span className="text-lg font-semibold text-gray-900">${total.toFixed(2)}</span>
+                  <span className="text-lg font-semibold text-gray-900">₹{total.toFixed(2)}</span>
                 </div>
               </div>
             </div>

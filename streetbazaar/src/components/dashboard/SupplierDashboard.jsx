@@ -24,7 +24,7 @@ const SupplierDashboard = () => {
     },
     {
       title: 'Total Revenue',
-      value: `$${supplierOrders.reduce((sum, order) => sum + (order.total || 0), 0).toFixed(2)}`,
+      value: `₹${supplierOrders.reduce((sum, order) => sum + (order.total || 0), 0).toFixed(2)}`,
       icon: DollarSign,
       color: 'green',
       trend: '+12% this month'
@@ -135,7 +135,7 @@ const SupplierDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-900">{order.date || 'Recent'}</p>
-                    <p className="text-sm font-medium text-gray-900">${order.total || '0.00'}</p>
+                    <p className="text-sm font-medium text-gray-900">₹{order.total || '0.00'}</p>
                   </div>
                 </div>
                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${

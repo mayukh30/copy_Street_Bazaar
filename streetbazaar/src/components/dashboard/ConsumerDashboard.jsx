@@ -17,10 +17,10 @@ const ConsumerDashboard = () => {
   };
 
   const recentOrders = [
-    { id: '#ORD-001', supplier: 'Fresh Foods Co.', amount: 89.50, status: 'Delivered', date: '2024-01-15' },
-    { id: '#ORD-002', supplier: 'Organic Market', amount: 156.20, status: 'In Transit', date: '2024-01-14' },
-    { id: '#ORD-003', supplier: 'Local Farms', amount: 73.80, status: 'Processing', date: '2024-01-13' },
-    { id: '#ORD-004', supplier: 'Green Grocers', amount: 94.30, status: 'Delivered', date: '2024-01-12' }
+    { id: '#ORD-001', supplier: 'Fresh Foods Co.', amount: 289.50, status: 'Delivered', date: '2024-01-15' },
+    { id: '#ORD-002', supplier: 'Organic Market', amount: 1156.20, status: 'In Transit', date: '2024-01-14' },
+    { id: '#ORD-003', supplier: 'Local Farms', amount: 873.80, status: 'Processing', date: '2024-01-13' },
+    { id: '#ORD-004', supplier: 'Green Grocers', amount: 994.30, status: 'Delivered', date: '2024-01-12' }
   ];
 
   const favoriteSuppliers = [
@@ -94,7 +94,7 @@ const ConsumerDashboard = () => {
                     <p className="text-sm text-gray-500">{order.date}</p>
                   </div>
                   <div className="text-right ml-4">
-                    <p className="font-semibold text-gray-900">${order.amount}</p>
+                    <p className="font-semibold text-gray-900">₹{order.amount}</p>
                     <button className="text-blue-600 hover:text-blue-700 text-sm">View</button>
                   </div>
                 </div>

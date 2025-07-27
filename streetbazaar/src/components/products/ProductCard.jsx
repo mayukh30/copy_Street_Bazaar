@@ -42,7 +42,7 @@ const ProductCard = ({ product, onEdit, onDelete, onAddToCart }) => {
             {product.name}
           </h3>
           <span className="text-xl font-bold text-blue-600">
-            ${product.price.toFixed(2)}
+            ₹{product.price.toFixed(2)}
           </span>
         </div>
         

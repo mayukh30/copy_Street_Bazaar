@@ -4,12 +4,12 @@ const Orders = () => {
   const [activeTab, setActiveTab] = useState('all');
 
   const orders = [
-    { id: '#ORD-001', date: '2024-01-15', items: 4, total: 89.50, status: 'Delivered', supplier: 'Fresh Foods Co.' },
-    { id: '#ORD-002', date: '2024-01-14', items: 2, total: 156.20, status: 'In Transit', supplier: 'Organic Market' },
-    { id: '#ORD-003', date: '2024-01-13', items: 6, total: 73.80, status: 'Processing', supplier: 'Local Farms' },
-    { id: '#ORD-004', date: '2024-01-12', items: 3, total: 94.30, status: 'Delivered', supplier: 'Green Grocers' },
-    { id: '#ORD-005', date: '2024-01-11', items: 5, total: 127.60, status: 'Cancelled', supplier: 'Farm Fresh' },
-    { id: '#ORD-006', date: '2024-01-10', items: 2, total: 45.30, status: 'Processing', supplier: 'Fresh Foods Co.' },
+    { id: '#ORD-001', date: '2024-01-15', items: 4, total: 1189.50, status: 'Delivered', supplier: 'Fresh Foods Co.' },
+    { id: '#ORD-002', date: '2024-01-14', items: 2, total: 5156.20, status: 'In Transit', supplier: 'Organic Market' },
+    { id: '#ORD-003', date: '2024-01-13', items: 6, total: 473.80, status: 'Processing', supplier: 'Local Farms' },
+    { id: '#ORD-004', date: '2024-01-12', items: 3, total: 2094.30, status: 'Delivered', supplier: 'Green Grocers' },
+    { id: '#ORD-005', date: '2024-01-11', items: 5, total: 1127.60, status: 'Cancelled', supplier: 'Farm Fresh' },
+    { id: '#ORD-006', date: '2024-01-10', items: 2, total: 945.30, status: 'Processing', supplier: 'Fresh Foods Co.' },
     { id: '#ORD-007', date: '2024-01-09', items: 8, total: 203.70, status: 'Delivered', supplier: 'Organic Market' }
   ];
 
@@ -73,7 +73,7 @@ const Orders = () => {
                 </div>
                 <div className="flex items-center space-x-4 mt-4 sm:mt-0">
                   <div className="text-right">
-                    <p className="text-lg font-semibold text-gray-900">${order.total}</p>
+                    <p className="text-lg font-semibold text-gray-900">₹{order.total}</p>
                   </div>
                   <div className="flex space-x-2">
                     <button className="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors text-sm">
