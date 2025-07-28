@@ -70,5 +70,5 @@ A **web-based platform** that bridges the gap between **suppliers** and **street
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/dripta05/Street_Bazaar.git
-cd Street_Bazaar
+git clone https://github.com/mayukh30/copy_Street_Bazaar.git
+cd copy_Street_Bazaar
