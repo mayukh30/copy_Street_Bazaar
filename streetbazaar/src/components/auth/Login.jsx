@@ -2,6 +2,8 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../common/AppContext';
 import { User, Lock, Mail, Building, Eye, EyeOff, ShoppingBag, Package } from 'lucide-react';
+import { createUserWithEmailAndPassword,signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase/firebaseConfig'; // Adjust the import path as necessary
 
 const Login = () => {
   const navigate = useNavigate();
@@ -49,68 +51,53 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    try {
-      if (isLogin) {
-        // Login Logic
-        const mockUser = mockUsers[userType];
-        
-        if (formData.email === mockUser.email && formData.password === mockUser.password) {
-          // Simulate API call delay
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          
-          // Set user in context (you'll need to implement setUser in your AppContext)
-          if (setUser) {
-            setUser(mockUser);
-          }
-          
-          // Navigate to appropriate dashboard
-          const redirectPath = userType === 'supplier' ? '/supplier' : '/consumer';
-          navigate(redirectPath);
-        } else {
-          setError('Invalid email or password');
-        }
-      } else {
-        // Registration Logic
-        if (formData.password !== formData.confirmPassword) {
-          setError('Passwords do not match');
-          return;
-        }
-
-        if (formData.password.length < 6) {
-          setError('Password must be at least 6 characters');
-          return;
-        }
-
-        // Simulate registration API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        const newUser = {
-          id: `${userType}_${Date.now()}`,
-          name: formData.name,
-          email: formData.email,
-          type: userType,
-          ...(userType === 'supplier' && { companyName: formData.companyName })
-        };
-
-        // Set user in context
-        if (setUser) {
-          setUser(newUser);
-        }
-
-        // Navigate to appropriate dashboard
-        const redirectPath = userType === 'supplier' ? '/supplier' : '/consumer';
-        navigate(redirectPath);
+  try {
+    if (isLogin) {
+      // === LOGIN ===
+      const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      const user = {
+        email: userCredential.user.email,
+        id: userCredential.user.uid,
+        type: userType,
+        name: formData.name,
+        ...(userType === 'supplier' && { companyName: formData.companyName })
+      };
+      setUser(user);
+      navigate(userType === 'supplier' ? '/supplier' : '/consumer');
+    } else {
+      // === REGISTER ===
+      if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match');
+        return;
       }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
-    } finally {
-      setLoading(false);
+
+      if (formData.password.length < 6) {
+        setError('Password must be at least 6 characters');
+        return;
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const user = {
+        email: userCredential.user.email,
+        id: userCredential.user.uid,
+        type: userType,
+        name: formData.name,
+        ...(userType === 'supplier' && { companyName: formData.companyName })
+      };
+      setUser(user);
+      navigate(userType === 'supplier' ? '/supplier' : '/consumer');
     }
-  };
+  } catch (err) {
+    console.error(err.message);
+    setError(err.message.includes("auth/") ? err.message.split("auth/")[1].replace(/-/g, ' ') : "Authentication error");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
